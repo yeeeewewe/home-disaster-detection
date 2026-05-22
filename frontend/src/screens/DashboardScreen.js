@@ -1,6 +1,7 @@
 ﻿import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -85,6 +86,22 @@ export default function DashboardScreen() {
     }
   };
 
+  const confirmModeChange = (mode) => {
+    if (modeInfo.current?.key === mode.key) return;
+    Alert.alert(
+      '切換情境模式',
+      `確定要切換為「${mode.label}」嗎？\n\n不同模式會改變煙霧、溫度、濕度門檻與警報敏感度。`,
+      [
+        { text: '取消', style: 'cancel' },
+        {
+          text: '確認切換',
+          style: 'default',
+          onPress: () => handleModeChange(mode.key),
+        },
+      ],
+    );
+  };
+
   const status = getStatusStyle(data?.status?.level);
   const fusion = data?.status?.fusion;
   const riskScore = data?.status?.riskScore;
@@ -106,7 +123,7 @@ export default function DashboardScreen() {
               key={mode.key}
               mode={mode}
               active={modeInfo.current?.key === mode.key}
-              onPress={() => handleModeChange(mode.key)}
+              onPress={() => confirmModeChange(mode)}
             />
           ))}
         </View>

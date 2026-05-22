@@ -130,6 +130,8 @@ function normalizeRisk(value, threshold) {
   return clamp((value / threshold) * 100);
 }
 
+// Sensor Fusion 步驟 1：使用 EMA（指數移動平均）降低感測器瞬間雜訊。
+// alpha 越高代表越相信新資料，越低則越平滑；本系統預設 0.45，保留即時性也抑制突波。
 function updateSmoothing({ smoke, temperature, humidity }) {
   if (!smoothedValues) {
     smoothedValues = { smoke, temperature, humidity };
@@ -160,6 +162,13 @@ function updateSmoothing({ smoke, temperature, humidity }) {
   };
 }
 
+// Sensor Fusion 步驟 2~5：
+// 2. 依目前情境模式調整煙霧、溫度、濕度門檻。
+// 3. 將三種感測值正規化為 0~100 風險值，方便跨單位融合。
+// 4. 以煙霧 50%、溫度 35%、濕度 15% 計算基礎風險分數。
+// 5. 透過趨勢交叉比對修正結果：
+//    - 煙霧 + 濕度同步上升、溫度未升：視為水氣干擾，降低火災風險。
+//    - 煙霧 + 溫度同步上升：視為火災關聯提高，提高警報可信度。
 function evaluateStatus({ smoke, temperature, humidity }) {
   const mode = currentMode;
   const adjustedSmokeThreshold = SMOKE_ALERT_THRESHOLD * mode.smokeFactor;
@@ -170,7 +179,6 @@ function evaluateStatus({ smoke, temperature, humidity }) {
   const smokeRisk = normalizeRisk(smoothed.smoke, adjustedSmokeThreshold);
   const temperatureRisk = normalizeRisk(smoothed.temperature, adjustedTempThreshold);
   const humidityRisk = normalizeRisk(smoothed.humidity, adjustedHumidityThreshold);
-  const smokeRising = trend.smoke >= 30 || smokeRisk >= 70;
   const temperatureRising = trend.temperature >= 3 || temperatureRisk >= 70;
   const humidityRising = trend.humidity >= 8 || humidityRisk >= 90;
   const humidityInterference =
