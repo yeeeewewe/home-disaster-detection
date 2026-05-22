@@ -16,6 +16,27 @@ export const STATUS_COLORS = {
     label: '水氣注意',
     emoji: '🟡',
   },
+  humidity_interference: {
+    bg: '#ca8a04',
+    bgSoft: '#fef9c3',
+    text: '#713f12',
+    label: '水氣干擾',
+    emoji: '🟡',
+  },
+  attention: {
+    bg: '#f59e0b',
+    bgSoft: '#fffbeb',
+    text: '#78350f',
+    label: '門檻接近',
+    emoji: '🟠',
+  },
+  warning: {
+    bg: '#ea580c',
+    bgSoft: '#ffedd5',
+    text: '#7c2d12',
+    label: '環境警戒',
+    emoji: '🟠',
+  },
   fire_alert: {
     bg: '#dc2626',
     bgSoft: '#fee2e2',

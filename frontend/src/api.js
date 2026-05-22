@@ -49,3 +49,14 @@ export function postSensorUpdate(payload) {
     body: JSON.stringify(payload),
   });
 }
+
+export function fetchMode() {
+  return request('/api/system/mode');
+}
+
+export function updateMode(mode) {
+  return request('/api/system/mode', {
+    method: 'POST',
+    body: JSON.stringify({ mode }),
+  });
+}

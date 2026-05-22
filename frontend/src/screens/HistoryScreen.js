@@ -26,7 +26,16 @@ function LogItem({ item }) {
         <Text style={styles.metric}>煙霧 {item.smoke ?? '--'}</Text>
         <Text style={styles.metric}>溫度 {item.temperature ?? '--'}°C</Text>
         <Text style={styles.metric}>濕度 {item.humidity ?? '--'}%</Text>
+        <Text style={styles.metric}>風險 {item.status?.riskScore ?? '--'}</Text>
       </View>
+      {item.eventType ? (
+        <Text style={styles.device}>事件：{item.eventType}</Text>
+      ) : null}
+      {item.status?.fusion?.reasons?.length ? (
+        <Text style={styles.reason}>
+          {item.status.fusion.reasons.join('、')}
+        </Text>
+      ) : null}
       {item.deviceId ? (
         <Text style={styles.device}>裝置：{item.deviceId}</Text>
       ) : null}
@@ -138,6 +147,7 @@ const styles = StyleSheet.create({
   metricsLine: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
   metric: { fontSize: 13, color: COLORS.textPrimary, fontWeight: '600' },
   device: { marginTop: 6, fontSize: 11, color: COLORS.textSecondary },
+  reason: { marginTop: 6, fontSize: 12, color: COLORS.textPrimary },
   emptyBox: { alignItems: 'center', paddingVertical: 60 },
   emptyEmoji: { fontSize: 48 },
   emptyText: { marginTop: 8, color: COLORS.textSecondary },
