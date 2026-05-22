@@ -6,6 +6,7 @@ import { Text } from 'react-native';
 
 import DashboardScreen from './src/screens/DashboardScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
+import SimulatorScreen from './src/screens/SimulatorScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,6 +46,11 @@ export default function App() {
           name="History"
           component={HistoryScreen}
           options={{ title: '歷史紀錄', tabBarIcon: tabIcon('📜') }}
+        />
+        <Tab.Screen
+          name="Simulator"
+          component={SimulatorScreen}
+          options={{ title: '模擬測試', tabBarIcon: tabIcon('🧪') }}
         />
       </Tab.Navigator>
     </NavigationContainer>
